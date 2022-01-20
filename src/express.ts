@@ -5,9 +5,10 @@ import {uriParams} from "./endpoints";
 export const setCookie = (res: Response, cookieName: string, cookieValue: any, expirationDate: Date, optionsOverride: CookieOptions = {}) => {
     const options: CookieOptions = {
         expires: expirationDate,
+        // @ts-ignore FIXME wrong typing: is supported property and is mandatory to work on Chrome
         sameSite: 'none',
         secure: true,
-        encode: (v: unknown) => v, // to avoid the string to be encoded @see https://stackoverflow.com/questions/63205599/prevent-url-encode-in-response-set-cookie-nodejs
+        encode: (v: string) => v, // to avoid the string to be encoded @see https://stackoverflow.com/questions/63205599/prevent-url-encode-in-response-set-cookie-nodejs
         ...optionsOverride
     };
     return res.cookie(cookieName, cookieValue, options);
