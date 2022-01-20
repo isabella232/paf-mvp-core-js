@@ -6,3 +6,7 @@ export interface PrivateKey {
 export interface PublicKey {
     verify: (toVerify: string, signature: string) => boolean
 }
+
+export interface PublicKeys {
+    [host: string]: PublicKey
+}
