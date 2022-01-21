@@ -1,5 +1,5 @@
-import ECDSA from "ecdsa-secp256r1";
-import ECKey from "ec-key";
+const ECDSA = require("ecdsa-secp256r1");
+const ECKey = require("ec-key");
 
 // Not provided by ecdsa-secp256r1 unfortunately
 export interface PrivateKey {
