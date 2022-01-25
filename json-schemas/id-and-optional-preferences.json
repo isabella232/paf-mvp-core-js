@@ -1,0 +1,19 @@
+{
+  "id": "id-and-optional-preferences",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "preferences": {
+      "$ref": "preferences"
+    },
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "$ref": "id"
+      }
+    }
+  },
+  "required": [
+    "identifiers"
+  ]
+}

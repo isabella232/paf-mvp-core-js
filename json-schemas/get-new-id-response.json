@@ -1,0 +1,30 @@
+{
+  "id": "get-new-id-response",
+  "allOf": [
+    {
+      "$ref": "message-base"
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "additionalProperties": false,
+      "properties": {
+        "identifiers": {
+          "type": "array",
+          "minCount": 1,
+          "maxCount": 1,
+          "items": {
+            "$ref": "id"
+          }
+        }
+      },
+      "required": [
+        "identifiers"
+      ]
+    }
+  },
+  "required": [
+    "body"
+  ]
+}

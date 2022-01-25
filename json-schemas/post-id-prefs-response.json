@@ -1,0 +1,17 @@
+{
+  "id": "post-id-prefs-response",
+  "allOf": [
+    {
+      "$ref": "get-id-prefs-response"
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "$ref": "id-and-preferences"
+    }
+  },
+  "required": [
+    "body"
+  ]
+}

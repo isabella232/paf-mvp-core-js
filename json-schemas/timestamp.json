@@ -1,0 +1,5 @@
+{
+  "id": "timestamp",
+  "type": "integer",
+  "minimum": 1
+}

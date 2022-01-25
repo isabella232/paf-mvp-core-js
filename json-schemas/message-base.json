@@ -1,0 +1,25 @@
+{
+  "id": "message-base",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sender": {
+      "$ref": "domain"
+    },
+    "receiver": {
+      "$ref": "domain"
+    },
+    "timestamp": {
+      "$ref": "timestamp"
+    },
+    "signature": {
+      "$ref": "signature"
+    }
+  },
+  "required": [
+    "sender",
+    "receiver",
+    "timestamp",
+    "signature"
+  ]
+}
