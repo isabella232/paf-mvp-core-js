@@ -1,0 +1,21 @@
+{
+  "id": "source",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timestamp": {
+      "$ref": "timestamp"
+    },
+    "domain": {
+      "$ref": "domain"
+    },
+    "signature": {
+      "$ref": "signature"
+    }
+  },
+  "required": [
+    "timestamp",
+    "domain",
+    "signature"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "get-id-prefs-response",
+  "allOf": [
+    {
+      "$ref": "message-base"
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "$ref": "id-and-optional-preferences"
+    }
+  },
+  "required": [
+    "body"
+  ]
+}
