@@ -15,27 +15,42 @@ const outputFile = path.join(__dirname, '..', 'src', 'model', 'generated-model.t
     const schemas = await Promise.all(files.map(async (f) => JSON.parse(await fs.promises.readFile(path.join(inputDir, f), 'utf-8'))))
     const initialValue: JSONSchema4 = {
         id: "root",
+        title: '_',
         type: "object",
         properties: {},
-        additionalProperties: false
+        additionalProperties: false,
+        description: '** Please ignore **\nOnly needed to have an entry point for generating all interfaces together'
     };
 
-    const pafSchema = schemas.reduce((accumulator: JSONSchema4, current: JSONSchema4) => {
-        accumulator.properties![current.id!] = {$ref: current.id}
+    const rootSchema = schemas.reduce((accumulator: JSONSchema4, current: JSONSchema4) => {
+        accumulator.properties![current.$id!] = {$ref: `${current.$id}.json`}
         return accumulator
     }, initialValue)
+
+    const schemaStore = schemas.reduce((accumulator: JSONSchema4, current: JSONSchema4) => {
+        // Automatically add an "id" field that seems to be needed to get a consistent data model
+        // and remove the title attribute that is used to generate class names (not convenient)
+        const {title, description, ...rest} = current;
+        accumulator[`${current.$id}.json`] = {
+            ...rest,
+            // If no description was provided, use the title instead (useful for comments)
+            description: description ?? title,
+            id: current.$id
+        }
+        return accumulator
+    }, {})
 
     // Define a custom resolver that will look "*.json" files in the same repo
     // This is required to be able to use id properties without ".json" at the end
     const resolver: ResolverOptions = {
         order: 1, // Will be executed first
         canRead: true,
-        async read(file) {
-            return await fs.promises.readFile(path.join(inputDir, path.basename(file.url) + '.json'), 'utf-8')
+        read(file) {
+            return JSON.stringify(schemaStore[path.basename(file.url)])
         }
     };
 
-    const ts = await compile(pafSchema, pafSchema.id,
+    const ts = await compile(rootSchema, rootSchema.id,
         {
             $refOptions: {
                 resolve: {localFile: resolver}

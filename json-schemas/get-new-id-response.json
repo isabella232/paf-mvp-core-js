@@ -1,13 +1,16 @@
 {
-  "id": "get-new-id-response",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get-new-id-response",
+  "title": "GET /v1/new-id response",
   "allOf": [
     {
-      "$ref": "message-base"
+      "$ref": "message-base.json"
     }
   ],
   "additionalProperties": false,
   "properties": {
     "body": {
+      "type": "object",
       "additionalProperties": false,
       "properties": {
         "identifiers": {
@@ -15,7 +18,7 @@
           "minCount": 1,
           "maxCount": 1,
           "items": {
-            "$ref": "id"
+            "$ref": "identifier.json"
           }
         }
       },
