@@ -1,14 +1,16 @@
 {
-  "id": "get-id-prefs-response",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get-id-prefs-response",
+  "title": "GET /v1/id-prefs response",
   "allOf": [
     {
-      "$ref": "message-base"
+      "$ref": "message-base.json"
     }
   ],
   "additionalProperties": false,
   "properties": {
     "body": {
-      "$ref": "id-and-optional-preferences"
+      "$ref": "id-and-optional-preferences.json"
     }
   },
   "required": [

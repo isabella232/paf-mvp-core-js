@@ -1,8 +1,10 @@
 {
-  "id": "get-new-id-request",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get-new-id-request",
+  "title": "GET /v1/new-id request",
   "allOf": [
     {
-      "$ref": "message-base"
+      "$ref": "message-base.json"
     }
   ]
 }

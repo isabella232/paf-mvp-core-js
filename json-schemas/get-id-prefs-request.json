@@ -1,8 +1,10 @@
 {
-  "id": "get-id-prefs-request",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "get-id-prefs-request",
+  "title": "GET /v1/id-prefs request",
   "allOf": [
     {
-      "$ref": "message-base"
+      "$ref": "message-base.json"
     }
   ]
 }

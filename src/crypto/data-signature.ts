@@ -1,4 +1,4 @@
-import {Id, Preferences, Source} from "../model/generated-model";
+import {Identifier, Preferences, Source} from "../model/generated-model";
 import {UnsignedData} from "../model/model";
 import {PrivateKey, PublicKey} from "./keys";
 
@@ -20,8 +20,8 @@ export abstract class DataSigner<T extends {source: Source}> {
     }
 }
 
-export class IdSigner extends DataSigner<Id> {
-    protected signatureString(data: UnsignedData<Id>): string {
+export class IdSigner extends DataSigner<Identifier> {
+    protected signatureString(data: UnsignedData<Identifier>): string {
         return [
             data.source.domain,
             data.source.timestamp,
