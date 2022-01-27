@@ -1,0 +1,7 @@
+{
+  "id": "version",
+  "type": "integer",
+  "enum": [
+    0
+  ]
+}

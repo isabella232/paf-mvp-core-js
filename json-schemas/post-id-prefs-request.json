@@ -1,0 +1,17 @@
+{
+  "id": "post-id-prefs-request",
+  "allOf": [
+    {
+      "$ref": "message-base"
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "$ref": "id-and-preferences"
+    }
+  },
+  "required": [
+    "body"
+  ]
+}

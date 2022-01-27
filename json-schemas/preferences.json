@@ -1,0 +1,27 @@
+{
+  "id": "preferences",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "$ref": "version"
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "opt_in": {
+          "type": "boolean"
+        }
+      }
+    },
+    "source": {
+      "$ref": "source"
+    }
+  },
+  "required": [
+    "version",
+    "data",
+    "source"
+  ]
+}
