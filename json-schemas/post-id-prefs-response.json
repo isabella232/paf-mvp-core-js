@@ -1,14 +1,16 @@
 {
-  "id": "post-id-prefs-response",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "post-id-prefs-response",
+  "title": "POST /v1/id-prefs response",
   "allOf": [
     {
-      "$ref": "get-id-prefs-response"
+      "$ref": "get-id-prefs-response.json"
     }
   ],
   "additionalProperties": false,
   "properties": {
     "body": {
-      "$ref": "id-and-preferences"
+      "$ref": "id-and-preferences.json"
     }
   },
   "required": [

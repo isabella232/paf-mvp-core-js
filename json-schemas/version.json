@@ -1,5 +1,8 @@
 {
-  "id": "version",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Version",
+  "description": "A version number. To be detailed.",
+  "$id": "version",
   "type": "integer",
   "enum": [
     0

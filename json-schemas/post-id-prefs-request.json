@@ -1,14 +1,16 @@
 {
-  "id": "post-id-prefs-request",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "post-id-prefs-request",
+  "title": "POST /v1/id-prefs request",
   "allOf": [
     {
-      "$ref": "message-base"
+      "$ref": "message-base.json"
     }
   ],
   "additionalProperties": false,
   "properties": {
     "body": {
-      "$ref": "id-and-preferences"
+      "$ref": "id-and-preferences.json"
     }
   },
   "required": [

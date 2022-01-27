@@ -1,15 +1,18 @@
 {
-  "id": "id-and-optional-preferences",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "id-and-optional-preferences",
+  "title": "Identifiers and optional preferences",
+  "description": "A list of identifiers and optionally, some preferences",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "preferences": {
-      "$ref": "preferences"
+      "$ref": "preferences.json"
     },
     "identifiers": {
       "type": "array",
       "items": {
-        "$ref": "id"
+        "$ref": "identifier.json"
       }
     }
   },

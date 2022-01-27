@@ -1,19 +1,22 @@
 {
-  "id": "message-base",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "message-base",
+  "title": "Core message",
+  "description": "The base properties of a request or response to/from an operator",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "sender": {
-      "$ref": "domain"
+      "$ref": "domain.json"
     },
     "receiver": {
-      "$ref": "domain"
+      "$ref": "domain.json"
     },
     "timestamp": {
-      "$ref": "timestamp"
+      "$ref": "timestamp.json"
     },
     "signature": {
-      "$ref": "signature"
+      "$ref": "signature.json"
     }
   },
   "required": [

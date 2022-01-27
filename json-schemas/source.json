@@ -1,16 +1,19 @@
 {
-  "id": "source",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Source",
+  "description": "Source of data representing what contracting party created and signed the data",
+  "$id": "source",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "timestamp": {
-      "$ref": "timestamp"
+      "$ref": "timestamp.json"
     },
     "domain": {
-      "$ref": "domain"
+      "$ref": "domain.json"
     },
     "signature": {
-      "$ref": "signature"
+      "$ref": "signature.json"
     }
   },
   "required": [
