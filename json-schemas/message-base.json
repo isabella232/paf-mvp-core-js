@@ -7,16 +7,19 @@
   "additionalProperties": false,
   "properties": {
     "sender": {
-      "$ref": "domain.json"
+      "$ref": "domain.json",
+      "description": "The domain name of the sender of this message"
     },
     "receiver": {
-      "$ref": "domain.json"
+      "$ref": "domain.json",
+      "description": "The domain name of the receiver of this message"
     },
     "timestamp": {
       "$ref": "timestamp.json"
     },
     "signature": {
-      "$ref": "signature.json"
+      "$ref": "signature.json",
+      "description": "Signature based on input:\n```\nsender + '\\u2063' +\nreceiver + '\\u2063' +\ntimestamp\n```"
     }
   },
   "required": [

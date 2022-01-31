@@ -5,5 +5,5 @@
   "$id": "domain",
   "type": "string",
   "format": "hostname",
-  "examples": ["advertiser.com", "operator-x.onekey.com"]
+  "examples": ["a-domain-name.com", "another.domain.co.uk"]
 }

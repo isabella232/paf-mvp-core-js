@@ -7,10 +7,12 @@
   "additionalProperties": false,
   "properties": {
     "timestamp": {
-      "$ref": "timestamp.json"
+      "$ref": "timestamp.json",
+      "description": "Time when data was signed"
     },
     "domain": {
-      "$ref": "domain.json"
+      "$ref": "domain.json",
+      "description": "The domain name of the entity that signed this data"
     },
     "signature": {
       "$ref": "signature.json"
