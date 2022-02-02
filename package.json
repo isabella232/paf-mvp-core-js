@@ -1,6 +1,6 @@
 {
   "name": "paf-mvp-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Prebid Addressability Framework (PAF) core library",
   "main": "index.js",
   "type": "commonjs",
