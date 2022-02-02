@@ -7,8 +7,8 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "echo \"nothing to update\"",
-    "generate-model": "ts-node scripts/generate-model.ts"
+    "generate-model": "ts-node scripts/generate-model.ts",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
