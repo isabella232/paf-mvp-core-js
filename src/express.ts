@@ -28,12 +28,12 @@ export const metaRedirect = (res: Response, redirectUrl: string, view: string) =
     })
 }
 
-export const getReturnUrl = (req: Request, res: Response): URL|undefined => {
+export const getReturnUrl = (req: Request, res: Response): URL | undefined => {
     const redirectStr = getMandatoryQueryStringParam(req, res, uriParams.returnUrl)
     return redirectStr ? new URL(redirectStr) : undefined
 }
 
-export const getMandatoryQueryStringParam = (req: Request, res: Response, paramName: string): string|undefined => {
+export const getMandatoryQueryStringParam = (req: Request, res: Response, paramName: string): string | undefined => {
     const stringValue = req.query[paramName] as string;
     if (stringValue === undefined) {
         res.sendStatus(400)
