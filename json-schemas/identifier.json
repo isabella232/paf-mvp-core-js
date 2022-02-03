@@ -12,14 +12,14 @@
     "type": {
       "type": "string",
       "enum": [
-        "prebid_id"
+        "paf_browser_id"
       ],
-      "description": "The identifier type. To date only \"prebid_id\" is supported"
+      "description": "The identifier type, identifier of type `paf_browser_id` is mandatory and is \"pivot\""
     },
     "persisted": {
       "type": "boolean",
       "defaultValue": true,
-      "description": "If set to false, means the identifier has not yet been persisted as a cookie"
+      "description": "If set to `false`, means the identifier has not yet been persisted as a cookie.<br>Otherwise, means this identifier is persisted as a PAF cookie<br>(default value = `true` meaning if the property is omitted the identifier *is* persisted)"
     },
     "value": {
       "type": "string",
