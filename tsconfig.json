@@ -11,6 +11,7 @@
     "declaration": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
+    "declaration": true,
     "paths": {
       "*": [
         "node_modules/*"

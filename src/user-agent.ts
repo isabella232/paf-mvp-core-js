@@ -2,5 +2,5 @@
 import {IBrowser} from "ua-parser-js";
 
 export const isBrowserKnownToSupport3PC = (browser: IBrowser) => {
-    return !browser.name!.includes('Safari')
+    return browser?.name && !browser.name.includes('Safari')
 }

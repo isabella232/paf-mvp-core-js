@@ -4,7 +4,16 @@ import * as path from "path";
 import * as fs from "fs";
 import {ResolverOptions} from "@apidevtools/json-schema-ref-parser";
 
-const inputDir = path.join(__dirname, '..', 'json-schemas');
+if (!(process.argv[2]?.length > 0)) {
+    throw `Usage: generate-model-from-schemas.ts <inputDir>\nExample: generate-model-from-schemas.ts ../../addressable-network-proposals/mvp-spec/json-schemas`
+}
+
+const inputDir = path.join(process.cwd(), process.argv[2]);
+
+if (!fs.existsSync(inputDir)) {
+    throw `Input dir not found: "${inputDir}"`
+}
+
 const outputFile = path.join(__dirname, '..', 'src', 'model', 'generated-model.ts');
 
 (async () => {
