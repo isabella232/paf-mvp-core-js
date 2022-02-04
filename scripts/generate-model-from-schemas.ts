@@ -16,6 +16,33 @@ if (!fs.existsSync(inputDir)) {
 
 const outputFile = path.join(__dirname, '..', 'src', 'model', 'generated-model.ts');
 
+const removeRefDescription = (schema: JSONSchema4): JSONSchema4 => {
+    if (schema.$ref) {
+        schema.description = undefined
+    }
+    if (schema.properties) {
+        Object.keys(schema.properties).forEach(currentKey => {
+            schema.properties![currentKey] = removeRefDescription(schema.properties![currentKey])
+        })
+    }
+
+    return schema
+}
+
+const cleanSchema = (schema: JSONSchema4): JSONSchema4 => {
+    // Remove the title attribute that is used to generate interface names (makes very long and ugly names)
+    const {title, description, ...rest} = removeRefDescription(schema);
+
+    // Remove all descriptions from references otherwise the generator will create a new interface (duplicate!)
+    return {
+        ...rest,
+        // If no description was provided, use the title instead (useful for comments)
+        description: description ?? title,
+        // Automatically add an "id" field that seems to be needed to get a consistent data model
+        id: schema.$id
+    }
+}
+
 (async () => {
     // Construct a "fake" object that references ALL schemas in the directory,
     // to make sure we generate all types in one output file
@@ -37,15 +64,7 @@ const outputFile = path.join(__dirname, '..', 'src', 'model', 'generated-model.t
     }, initialValue)
 
     const schemaStore = schemas.reduce((accumulator: JSONSchema4, current: JSONSchema4) => {
-        // Automatically add an "id" field that seems to be needed to get a consistent data model
-        // and remove the title attribute that is used to generate class names (not convenient)
-        const {title, description, ...rest} = current;
-        accumulator[`${current.$id}.json`] = {
-            ...rest,
-            // If no description was provided, use the title instead (useful for comments)
-            description: description ?? title,
-            id: current.$id
-        }
+        accumulator[`${current.$id}.json`] = cleanSchema(current)
         return accumulator
     }, {})
 
