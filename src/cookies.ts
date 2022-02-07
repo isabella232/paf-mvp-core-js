@@ -1,4 +1,4 @@
-import {IdsAndOptionalPreferences, Identifier, Preferences} from "./model/generated-model";
+import {IdsAndOptionalPreferences, Identifier, Preferences, Identifiers} from "./model/generated-model";
 
 export enum Cookies {
     ID = "PrebidId",
@@ -16,12 +16,18 @@ export const getPrebidDataCacheExpiration = (date: Date = new Date()) => {
 }
 
 /**
- * @param idCookie
+ * @param idsCookie
  * @param prefsCookie
  */
-export const fromCookieValues = (idCookie: string, prefsCookie: string): IdsAndOptionalPreferences => {
+export const fromCookieValues = (idsCookie: string, prefsCookie: string): IdsAndOptionalPreferences => {
     return {
-        identifiers: (idCookie === UNKNOWN_TO_OPERATOR || idCookie === undefined) ? [] : [JSON.parse(idCookie) as Identifier],
-        preferences: (prefsCookie === UNKNOWN_TO_OPERATOR || prefsCookie === undefined) ? undefined : JSON.parse(prefsCookie) as Preferences
+        identifiers: fromIdsCookie(idsCookie),
+        preferences: fromPrefsCookie(prefsCookie)
     }
 }
+
+export const fromIdsCookie = (idsCookie: string): Identifiers => (idsCookie === UNKNOWN_TO_OPERATOR || idsCookie?.length === 0) ? [] : JSON.parse(idsCookie) as Identifiers
+export const fromPrefsCookie = (prefsCookie: string): Preferences|undefined => (prefsCookie === UNKNOWN_TO_OPERATOR || prefsCookie === undefined) ? undefined : JSON.parse(prefsCookie) as Preferences
+
+export const toIdsCookie = (identifiers: Identifiers): string => JSON.stringify(identifiers)
+export const toPrefsCookie = (preferences: Preferences): string => JSON.stringify(preferences)

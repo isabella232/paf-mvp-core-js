@@ -10,7 +10,7 @@ import {PrivateKey, PublicKey} from "./keys";
 
 export const SIGN_SEP = '\u2063';
 
-
+// FIXME public and private keys should be passed (as string) in the constructor
 export abstract class MessageSigner<T extends MessageBase> {
     protected abstract signatureString(message: UnsignedMessage<T>): string;
 

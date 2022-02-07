@@ -7,14 +7,16 @@ export const signAndVerifyEndpoints = {
 }
 
 export const redirectEndpoints = {
-    read: '/redirect/read',
-    write: "/redirect/write"
+    read: '/v1/redirect/get-ids-prefs',
+    write: "/v1/redirect/post-ids-prefs"
 }
 
 export const jsonEndpoints = {
-    read: '/json/read',
-    verify3PC: '/json/verify3pc',
-    write: "/json/write",
+    read: '/v1/ids-prefs',
+    write: "/v1/ids-prefs",
+    verify3PC: '/v1/3pc',
+    newId: '/v1/new-id',
+    identity: '/v1/identity'
 }
 
 export const uriParams = {
