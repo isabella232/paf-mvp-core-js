@@ -1,6 +1,8 @@
 import {
     GetIdsPrefsRequest,
-    GetIdsPrefsResponse, GetNewIdResponse,
+    GetIdsPrefsResponse,
+    GetNewIdRequest,
+    GetNewIdResponse,
     MessageBase,
     PostIdsPrefsRequest,
     PostIdsPrefsResponse
@@ -58,7 +60,17 @@ export class GetIdsPrefsRequestSigner extends MessageSigner<GetIdsPrefsRequest> 
     }
 }
 
-function getIdsPrefsignature(getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>) {
+export class GetNewIdRequestSigner extends MessageSigner<GetNewIdRequest> {
+    protected signatureString(getNewIdRequest: UnsignedMessage<GetNewIdRequest>): string {
+        return [
+            getNewIdRequest.sender,
+            getNewIdRequest.receiver,
+            getNewIdRequest.timestamp
+        ].join(SIGN_SEP)
+    }
+}
+
+const getIdsPrefsignature = (getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>) => {
     const dataToSign = [
         getIdsPrefsResponse.sender,
         getIdsPrefsResponse.receiver,
@@ -75,7 +87,7 @@ function getIdsPrefsignature(getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsRes
     dataToSign.push(getIdsPrefsResponse.timestamp.toString())
 
     return dataToSign.join(SIGN_SEP)
-}
+};
 
 export class GetIdsPrefsResponseSigner extends MessageSigner<GetIdsPrefsResponse> {
     protected signatureString(getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>): string {
