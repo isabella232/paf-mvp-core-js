@@ -8,9 +8,9 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "declaration": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
+    "declaration": true,
     "paths": {
       "*": [
         "node_modules/*"
