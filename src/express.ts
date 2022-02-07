@@ -1,6 +1,8 @@
 import {Request, Response} from "express";
 import {CookieOptions} from "express-serve-static-core";
 import {uriParams} from "./endpoints";
+import {decodeBase64, encodeBase64, QSParam} from "./query-string";
+import {MessageBase} from "./model/generated-model";
 
 export const setCookie = (res: Response, cookieName: string, cookieValue: any, expirationDate: Date, optionsOverride: CookieOptions = {}) => {
     const options: CookieOptions = {
@@ -40,4 +42,21 @@ export const getMandatoryQueryStringParam = (req: Request, res: Response, paramN
         return undefined;
     }
     return stringValue
+}
+
+/**
+ * Get request or response object from query string
+ * @param req
+ */
+export const getFromQueryString = <T extends MessageBase>(req: Request): T => {
+    return JSON.parse(decodeBase64(req.query[QSParam.PAF] as string)) as T
+}
+
+/**
+ * Set request or response object in query string
+ * @param req
+ */
+export const setInQueryString = <T extends MessageBase>(req: Request, requestOrResponse: T): Request => {
+    req.params[QSParam.PAF] = encodeBase64(JSON.stringify(requestOrResponse))
+    return req;
 }
