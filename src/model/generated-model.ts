@@ -42,19 +42,13 @@ export type Signature = string;
  */
 export type Identifiers = Identifier1[];
 /**
- * POST /v1/ids-prefs response
- */
-export type PostIdsPrefsResponse = GetIdsPrefsResponse & {
-  body: IdsAndPreferences;
-};
-/**
  * The URL that the user should be be redirected to, to provide response data
  */
 export type ReturnUrl = string;
 /**
  * The response code used on a redirect endpoint<br>While REST endpoints can use HTTP codes to communicate the state of the response, redirect endpoints are limited to `30x` HTTP codes.<br>To address this problem, this property is used to contain the same HTTP code as the one that would be returned by a REST endpoint.
  */
-export type ResponseCode = string;
+export type ResponseCode = number;
 
 /**
  * ** Please ignore **
@@ -268,6 +262,16 @@ export interface PostIdsPrefsRequest {
   body: IdsAndPreferences;
 }
 /**
+ * POST /v1/ids-prefs response
+ */
+export interface PostIdsPrefsResponse {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp2;
+  signature: Signature;
+  body: IdsAndPreferences;
+}
+/**
  * GET /v1/redirect/get-ids-prefs request
  */
 export interface RedirectGetIdsPrefsRequest {
@@ -288,6 +292,6 @@ export interface RedirectPostIdsPrefsRequest {
 }
 export interface RedirectPostIdsPrefsResponse {
   code: ResponseCode;
-  response?: GetIdsPrefsResponse;
+  response?: PostIdsPrefsResponse;
   error?: Error;
 }
