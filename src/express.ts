@@ -46,3 +46,8 @@ export const setInQueryString = <T>(url: URL, requestOrResponse: T): URL => {
     url.searchParams.set(QSParam.paf, encodeBase64(JSON.stringify(requestOrResponse)))
     return url
 }
+
+
+export const getCookies = (req: Request) => req.cookies ?? {}
+
+export const getRequestUrl = (req: Request, path = req.url) => new URL(path, `${req.protocol}://${req.get('host')}`)
