@@ -4,7 +4,7 @@ import {
     GetNewIdResponse,
     Identifier,
     IdsAndOptionalPreferences, IdsAndPreferences,
-    PostIdsPrefsResponse
+    PostIdsPrefsResponse, Test3Pc
 } from "./generated-model";
 import {UnsignedMessage} from "./model";
 import {
@@ -139,9 +139,9 @@ export class Get3PCResponseBuilder extends RestResponseBuilder<undefined> {
         super(host, privateKey, jsonEndpoints.verify3PC);
     }
 
-    buildResponse(supported: boolean): Get3PcResponse | Error {
-        return supported
-            ? {"3pc": true}
+    buildResponse(cookieFound: Test3Pc | undefined): Get3PcResponse | Error {
+        return cookieFound
+            ? {"3pc": cookieFound}
             : {message: "3PC not supported"}
     }
 }

@@ -14,6 +14,10 @@ export type Domain = string;
  */
 export type Get3PcRequest = null;
 /**
+ * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
+ */
+export type Timestamp = number;
+/**
  * No parameter expected to call this endpoint
  */
 export type GetIdentityRequest = null;
@@ -22,11 +26,7 @@ export type GetIdentityRequest = null;
  */
 export type Version = 0;
 /**
- * Timestamp when the contracting party started using this key for signing
- */
-export type Timestamp = number;
-/**
- * Timestamp when the contracting party stopped using this key for signing
+ * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
  */
 export type Timestamp1 = number;
 /**
@@ -81,7 +81,8 @@ export interface _ {
   "return-url"?: ReturnUrl;
   signature?: Signature;
   source?: Source;
-  timestamp?: Timestamp2;
+  "test-3pc"?: Test3Pc;
+  timestamp?: Timestamp;
   version?: Version;
 }
 /**
@@ -97,11 +98,13 @@ export interface Error {
  * GET /v1/3pc response
  */
 export interface Get3PcResponse {
-  /**
-   * Always return `true` to signify 3rd party cookies have been verified (are supported)
-   * If 3rd party cookies are not supported, the endpoint returns `404` and an error message
-   */
-  "3pc": true;
+  "3pc": Test3Pc;
+}
+/**
+ * A cookie temporarily set to test support of 3d party cookies
+ */
+export interface Test3Pc {
+  timestamp: Timestamp;
 }
 /**
  * GET /v1/identity response
@@ -125,8 +128,8 @@ export interface GetIdentityResponse {
      * Public key string value
      */
     key: string;
-    start: Timestamp;
-    end?: Timestamp1;
+    start: Timestamp1;
+    end?: Timestamp2;
   }[];
 }
 /**
@@ -135,7 +138,7 @@ export interface GetIdentityResponse {
 export interface GetIdsPrefsRequest {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
 }
 /**
@@ -144,7 +147,7 @@ export interface GetIdsPrefsRequest {
 export interface GetIdsPrefsResponse {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
   body: IdsAndOptionalPreferences;
 }
@@ -172,7 +175,7 @@ export interface Preferences {
  * Source of data representing what contracting party created and signed the data
  */
 export interface Source {
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   domain: Domain;
   signature: Signature;
 }
@@ -201,7 +204,7 @@ export interface Identifier {
 export interface GetNewIdRequest {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
 }
 /**
@@ -210,7 +213,7 @@ export interface GetNewIdRequest {
 export interface GetNewIdResponse {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
   body: {
     identifiers: Identifier[];
@@ -248,7 +251,7 @@ export interface IdsAndPreferences {
 export interface MessageBase {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
 }
 /**
@@ -257,7 +260,7 @@ export interface MessageBase {
 export interface PostIdsPrefsRequest {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
   body: IdsAndPreferences;
 }
@@ -267,7 +270,7 @@ export interface PostIdsPrefsRequest {
 export interface PostIdsPrefsResponse {
   sender: Domain;
   receiver: Domain;
-  timestamp: Timestamp2;
+  timestamp: Timestamp;
   signature: Signature;
   body: IdsAndPreferences;
 }
