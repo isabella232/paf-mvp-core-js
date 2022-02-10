@@ -34,6 +34,7 @@ export class IdSigner extends DataSigner<Identifier> {
 
 export class PrefsSigner extends DataSigner<Preferences> {
     protected signatureString(preferences: UnsignedData<Preferences>): string {
+        //FIXME add identifiers!!
 
         const dataToSign = [
             preferences.source.domain,
