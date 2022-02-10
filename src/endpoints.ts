@@ -1,6 +1,6 @@
 // TODO refactor to group endpoints and params
 export const proxyEndpoints = {
-    verifyRead: '/verify/read',
+    verifyRedirectRead: '/verify/redirectRead',
     signWrite: '/sign/write',
     signPrefs: '/sign/prefs',
 }

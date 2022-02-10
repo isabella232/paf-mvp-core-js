@@ -1,10 +1,14 @@
 import {
-    Error, Get3PcResponse, GetIdentityResponse,
+    Error,
+    Get3PcResponse,
+    GetIdentityResponse,
     GetIdsPrefsResponse,
     GetNewIdResponse,
     Identifier,
-    IdsAndOptionalPreferences, IdsAndPreferences,
-    PostIdsPrefsResponse, Test3Pc
+    IdsAndOptionalPreferences,
+    IdsAndPreferences,
+    PostIdsPrefsResponse,
+    Test3Pc
 } from "./generated-model";
 import {UnsignedMessage} from "./model";
 import {
@@ -14,9 +18,9 @@ import {
 } from "../crypto/message-signature";
 import {PrivateKey, privateKeyFromString} from "../crypto/keys";
 import {jsonEndpoints, redirectEndpoints} from "../endpoints";
-import {QSParam} from "../query-string";
 import {getTimeStampInSec} from "../timestamp";
 import {KeyInfo} from "../crypto/identity";
+import {setInQueryString} from "../express";
 
 export abstract class RestResponseBuilder<T> {
     protected ecdsaKey: PrivateKey;
@@ -35,7 +39,7 @@ export abstract class RestAndRedirectResponseBuilder<T> extends RestResponseBuil
     getRedirectUrl(returnUrl: URL, redirectResponse: { code: number, response?: T, error?: Error }): URL {
 
         if (redirectResponse) {
-            returnUrl.searchParams.set(QSParam.paf, JSON.stringify(redirectResponse))
+            setInQueryString(returnUrl, redirectResponse)
         }
 
         return returnUrl

@@ -70,7 +70,7 @@ export class GetNewIdRequestSigner extends MessageSigner<GetNewIdRequest> {
     }
 }
 
-const getIdsPrefsignature = (getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>) => {
+const getIdsPrefSignatureInput = (getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>) => {
     const dataToSign = [
         getIdsPrefsResponse.sender,
         getIdsPrefsResponse.receiver,
@@ -91,18 +91,18 @@ const getIdsPrefsignature = (getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsRes
 
 export class GetIdsPrefsResponseSigner extends MessageSigner<GetIdsPrefsResponse> {
     protected signatureString(getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>): string {
-        return getIdsPrefsignature(getIdsPrefsResponse);
+        return getIdsPrefSignatureInput(getIdsPrefsResponse);
     }
 }
 
 export class PostIdsPrefsResponseSigner extends MessageSigner<PostIdsPrefsResponse> {
     protected signatureString(postIdsPrefsResponse: UnsignedMessage<PostIdsPrefsResponse>): string {
-        return getIdsPrefsignature(postIdsPrefsResponse);
+        return getIdsPrefSignatureInput(postIdsPrefsResponse);
     }
 }
 
 export class GetNewIdResponseSigner extends MessageSigner<GetNewIdResponse> {
     protected signatureString(getNewIdResponse: UnsignedMessage<GetNewIdResponse>): string {
-        return getIdsPrefsignature(getNewIdResponse);
+        return getIdsPrefSignatureInput(getNewIdResponse);
     }
 }

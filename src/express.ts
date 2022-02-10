@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {CookieOptions} from "express-serve-static-core";
-import {decodeBase64, encodeBase64, QSParam} from "./query-string";
-import {MessageBase} from "./model/generated-model";
+import {encodeBase64, fromDataToObject, QSParam} from "./query-string";
 
 export const setCookie = (res: Response, cookieName: string, cookieValue: any, expirationDate: Date, optionsOverride: CookieOptions = {}) => {
     const options: CookieOptions = {
@@ -35,7 +34,7 @@ export const metaRedirect = (res: Response, redirectUrl: string, view: string) =
  */
 export const getPafDataFromQueryString = <T>(req: Request): T|undefined => {
     const data = req.query[QSParam.paf] as string | undefined;
-    return data ? JSON.parse(decodeBase64(data)) as T : undefined
+    return fromDataToObject(data)
 }
 
 /**
