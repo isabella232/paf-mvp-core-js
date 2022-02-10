@@ -5,8 +5,9 @@ import {PrivateKey, privateKeyFromString} from "../crypto/keys";
 import {jsonEndpoints, redirectEndpoints} from "../endpoints";
 import {getTimeStampInSec} from "../timestamp";
 import {QSParam} from "../query-string";
+import {setInQueryString} from "../express";
 
-export abstract class RestRequestBuilder<T> {
+export abstract class RestRequestBuilder<T extends object | undefined> {
     protected ecdsaKey: PrivateKey;
 
     constructor(protected protocol: 'https' | 'http', public operatorHost: string, protected host: string, privateKey: string, protected restEndpoint: string) {
@@ -14,21 +15,21 @@ export abstract class RestRequestBuilder<T> {
     }
 
     protected getOperatorUrl(endpoint: string, pafQuery: object | undefined = undefined): URL {
-        const url = new URL(`${this.protocol}://${this.operatorHost}${endpoint}`);
+        let url = new URL(`${this.protocol}://${this.operatorHost}${endpoint}`);
 
         if (pafQuery) {
-            url.searchParams.set(QSParam.PAF, JSON.stringify(pafQuery))
+            url = setInQueryString(url, pafQuery)
         }
 
         return url
     }
 
     getRestUrl(request: T): URL {
-        return this.getOperatorUrl(this.restEndpoint, request as unknown as object)
+        return this.getOperatorUrl(this.restEndpoint, request)
     }
 }
 
-export abstract class RestAndRedirectRequestBuilder<T> extends RestRequestBuilder<T> {
+export abstract class RestAndRedirectRequestBuilder<T extends object | undefined> extends RestRequestBuilder<T> {
 
     constructor(protocol: "https" | "http", operatorHost: string, host: string, privateKey: string, restEndpoint: string, protected redirectEndpoint: string) {
         super(protocol, operatorHost, host, privateKey, restEndpoint);
@@ -38,10 +39,10 @@ export abstract class RestAndRedirectRequestBuilder<T> extends RestRequestBuilde
         return this.getOperatorUrl(this.redirectEndpoint, redirectRequest)
     }
 
-    toRedirectRequest(request: T, returnUrl: string) {
+    toRedirectRequest(request: T, returnUrl: URL) {
         return {
             request,
-            returnUrl
+            returnUrl: returnUrl.toString()
         }
     }
 }
@@ -86,8 +87,11 @@ export class PostIdsPrefsRequestBuilder extends RestAndRedirectRequestBuilder<Po
         };
     }
 
-    getRestUrl(request: PostIdsPrefsRequest): URL {
-        return this.getOperatorUrl(this.restEndpoint) // /!\ not passing any object because it will be sent as POST!
+    /**
+     * Note: no request parameter as it is used as POST payload, not query string
+     */
+    getRestUrl(): URL {
+        return this.getOperatorUrl(this.restEndpoint)
     }
 }
 
@@ -118,6 +122,13 @@ export class Get3PCRequestBuilder extends RestRequestBuilder<undefined> {
 
     buildRequest(timestamp = getTimeStampInSec()): undefined {
         return undefined;
+    }
+
+    /**
+     * Note: no request parameter
+     */
+    getRestUrl(): URL {
+        return this.getOperatorUrl(this.restEndpoint)
     }
 }
 

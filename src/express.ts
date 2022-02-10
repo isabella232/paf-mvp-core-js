@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import {CookieOptions} from "express-serve-static-core";
-import {uriParams} from "./endpoints";
 import {decodeBase64, encodeBase64, QSParam} from "./query-string";
 import {MessageBase} from "./model/generated-model";
 
@@ -30,33 +29,21 @@ export const metaRedirect = (res: Response, redirectUrl: string, view: string) =
     })
 }
 
-export const getReturnUrl = (req: Request, res: Response): URL | undefined => {
-    const redirectStr = getMandatoryQueryStringParam(req, res, uriParams.returnUrl)
-    return redirectStr ? new URL(redirectStr) : undefined
-}
-
-export const getMandatoryQueryStringParam = (req: Request, res: Response, paramName: string): string | undefined => {
-    const stringValue = req.query[paramName] as string;
-    if (stringValue === undefined) {
-        res.sendStatus(400)
-        return undefined;
-    }
-    return stringValue
-}
-
 /**
- * Get request or response object from query string
+ * Extract PAF data from query string if the "paf" query string parameter is set.
  * @param req
  */
-export const getFromQueryString = <T extends MessageBase>(req: Request): T => {
-    return JSON.parse(decodeBase64(req.query[QSParam.PAF] as string)) as T
+export const getPafDataFromQueryString = <T>(req: Request): T|undefined => {
+    const data = req.query[QSParam.paf] as string | undefined;
+    return data ? JSON.parse(decodeBase64(data)) as T : undefined
 }
 
 /**
  * Set request or response object in query string
  * @param req
+ * @param requestOrResponse
  */
-export const setInQueryString = <T extends MessageBase>(req: Request, requestOrResponse: T): Request => {
-    req.params[QSParam.PAF] = encodeBase64(JSON.stringify(requestOrResponse))
-    return req;
+export const setInQueryString = <T>(url: URL, requestOrResponse: T): URL => {
+    url.searchParams.set(QSParam.paf, encodeBase64(JSON.stringify(requestOrResponse)))
+    return url
 }

@@ -32,15 +32,13 @@ export abstract class RestAndRedirectResponseBuilder<T> extends RestResponseBuil
         super(host, privateKey, restEndpoint);
     }
 
-    getRedirectUrl(returnUrl: string, redirectResponse: { code: number, response?: T, error?: Error }): URL {
-
-        const url = new URL(returnUrl);
+    getRedirectUrl(returnUrl: URL, redirectResponse: { code: number, response?: T, error?: Error }): URL {
 
         if (redirectResponse) {
-            url.searchParams.set(QSParam.PAF, JSON.stringify(redirectResponse))
+            returnUrl.searchParams.set(QSParam.paf, JSON.stringify(redirectResponse))
         }
 
-        return url
+        return returnUrl
     }
 
     toRedirectResponse(response: T, code: number) {
