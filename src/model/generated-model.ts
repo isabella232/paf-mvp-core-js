@@ -22,9 +22,11 @@ export type Timestamp = number;
  */
 export type GetIdentityRequest = null;
 /**
- * A version number. To be detailed.
+ * A version number made of a "major" and a "minor" version numbers.
+ *
+ * To be detailed.
  */
-export type Version = 0;
+export type Version = string;
 /**
  * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
  */

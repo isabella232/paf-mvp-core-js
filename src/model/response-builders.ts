@@ -163,7 +163,7 @@ export class GetIdentityResponseBuilder extends RestResponseBuilder<undefined> {
                 end: end ? getTimeStampInSec(end) : undefined,
             })),
             type: this.type,
-            version: 0
+            version: "0.1"
         }
     }
 }
