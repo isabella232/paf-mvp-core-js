@@ -1,16 +1,18 @@
 import {
-    GetIdPrefsRequest,
-    GetIdPrefsResponse, GetNewIdResponse,
+    GetIdsPrefsRequest,
+    GetIdsPrefsResponse,
+    GetNewIdRequest,
+    GetNewIdResponse,
     MessageBase,
-    PostIdPrefsRequest,
-    PostIdPrefsResponse
+    PostIdsPrefsRequest,
+    PostIdsPrefsResponse
 } from "../model/generated-model";
 import {UnsignedMessage} from "../model/model";
 import {PrivateKey, PublicKey} from "./keys";
 
 export const SIGN_SEP = '\u2063';
 
-
+// FIXME public and private keys should be passed (as string) in the constructor
 export abstract class MessageSigner<T extends MessageBase> {
     protected abstract signatureString(message: UnsignedMessage<T>): string;
 
@@ -27,70 +29,80 @@ export abstract class MessageSigner<T extends MessageBase> {
     }
 }
 
-export class PostIdPrefsRequestSigner extends MessageSigner<PostIdPrefsRequest> {
-    protected signatureString(postIdPrefsRequest: UnsignedMessage<PostIdPrefsRequest>) {
+export class PostIdsPrefsRequestSigner extends MessageSigner<PostIdsPrefsRequest> {
+    protected signatureString(postIdsPrefsRequest: UnsignedMessage<PostIdsPrefsRequest>) {
         const dataToSign = [
-            postIdPrefsRequest.sender,
-            postIdPrefsRequest.receiver,
+            postIdsPrefsRequest.sender,
+            postIdsPrefsRequest.receiver,
         ];
 
-        if (postIdPrefsRequest.body.preferences) {
-            dataToSign.push(postIdPrefsRequest.body.preferences.source.signature)
+        if (postIdsPrefsRequest.body.preferences) {
+            dataToSign.push(postIdsPrefsRequest.body.preferences.source.signature)
         }
 
-        for (let id of postIdPrefsRequest.body.identifiers ?? []) {
+        for (let id of postIdsPrefsRequest.body.identifiers ?? []) {
             dataToSign.push(id.source.signature)
         }
 
-        dataToSign.push(postIdPrefsRequest.timestamp.toString())
+        dataToSign.push(postIdsPrefsRequest.timestamp.toString())
 
         return dataToSign.join(SIGN_SEP);
     }
 }
 
-export class GetIdPrefsRequestSigner extends MessageSigner<GetIdPrefsRequest> {
-    protected signatureString(getIdPrefsRequest: UnsignedMessage<GetIdPrefsRequest>): string {
+export class GetIdsPrefsRequestSigner extends MessageSigner<GetIdsPrefsRequest> {
+    protected signatureString(getIdsPrefsRequest: UnsignedMessage<GetIdsPrefsRequest>): string {
         return [
-            getIdPrefsRequest.sender,
-            getIdPrefsRequest.receiver,
-            getIdPrefsRequest.timestamp
+            getIdsPrefsRequest.sender,
+            getIdsPrefsRequest.receiver,
+            getIdsPrefsRequest.timestamp
         ].join(SIGN_SEP)
     }
 }
 
-function getIdPrefSignature(getIdPrefsResponse: UnsignedMessage<GetIdPrefsResponse>) {
+export class GetNewIdRequestSigner extends MessageSigner<GetNewIdRequest> {
+    protected signatureString(getNewIdRequest: UnsignedMessage<GetNewIdRequest>): string {
+        return [
+            getNewIdRequest.sender,
+            getNewIdRequest.receiver,
+            getNewIdRequest.timestamp
+        ].join(SIGN_SEP)
+    }
+}
+
+const getIdsPrefSignatureInput = (getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>) => {
     const dataToSign = [
-        getIdPrefsResponse.sender,
-        getIdPrefsResponse.receiver,
+        getIdsPrefsResponse.sender,
+        getIdsPrefsResponse.receiver,
     ];
 
-    if (getIdPrefsResponse.body.preferences) {
-        dataToSign.push(getIdPrefsResponse.body.preferences.source.signature)
+    if (getIdsPrefsResponse.body.preferences) {
+        dataToSign.push(getIdsPrefsResponse.body.preferences.source.signature)
     }
 
-    for (let id of getIdPrefsResponse.body.identifiers ?? []) {
+    for (let id of getIdsPrefsResponse.body.identifiers ?? []) {
         dataToSign.push(id.source.signature)
     }
 
-    dataToSign.push(getIdPrefsResponse.timestamp.toString())
+    dataToSign.push(getIdsPrefsResponse.timestamp.toString())
 
     return dataToSign.join(SIGN_SEP)
-}
+};
 
-export class GetIdPrefsResponseSigner extends MessageSigner<GetIdPrefsResponse> {
-    protected signatureString(getIdPrefsResponse: UnsignedMessage<GetIdPrefsResponse>): string {
-        return getIdPrefSignature(getIdPrefsResponse);
+export class GetIdsPrefsResponseSigner extends MessageSigner<GetIdsPrefsResponse> {
+    protected signatureString(getIdsPrefsResponse: UnsignedMessage<GetIdsPrefsResponse>): string {
+        return getIdsPrefSignatureInput(getIdsPrefsResponse);
     }
 }
 
-export class PostIdPrefsResponseSigner extends MessageSigner<PostIdPrefsResponse> {
-    protected signatureString(postIdPrefsResponse: UnsignedMessage<PostIdPrefsResponse>): string {
-        return getIdPrefSignature(postIdPrefsResponse);
+export class PostIdsPrefsResponseSigner extends MessageSigner<PostIdsPrefsResponse> {
+    protected signatureString(postIdsPrefsResponse: UnsignedMessage<PostIdsPrefsResponse>): string {
+        return getIdsPrefSignatureInput(postIdsPrefsResponse);
     }
 }
 
 export class GetNewIdResponseSigner extends MessageSigner<GetNewIdResponse> {
     protected signatureString(getNewIdResponse: UnsignedMessage<GetNewIdResponse>): string {
-        return getIdPrefSignature(getNewIdResponse);
+        return getIdsPrefSignatureInput(getNewIdResponse);
     }
 }

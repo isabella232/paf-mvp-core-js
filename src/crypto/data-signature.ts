@@ -4,6 +4,7 @@ import {PrivateKey, PublicKey} from "./keys";
 
 export const SIGN_SEP = '\u2063';
 
+// FIXME public and private keys should be passed (as string) in the constructor
 export abstract class DataSigner<T extends {source: Source}> {
     protected abstract signatureString(data: UnsignedData<T>): string;
 
@@ -33,6 +34,7 @@ export class IdSigner extends DataSigner<Identifier> {
 
 export class PrefsSigner extends DataSigner<Preferences> {
     protected signatureString(preferences: UnsignedData<Preferences>): string {
+        //FIXME add identifiers!!
 
         const dataToSign = [
             preferences.source.domain,

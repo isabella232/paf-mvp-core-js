@@ -1,9 +1,9 @@
-import {IdAndOptionalPreferences, Identifier, Preferences} from "./model/generated-model";
+import {IdsAndOptionalPreferences, Identifier, Preferences, Identifiers, Test3Pc} from "./model/generated-model";
 
 export enum Cookies {
-    ID = "PrebidId",
-    PREFS = 'PrebidPrefs',
-    TEST_3PC = 'Prebid-test_3pc'
+    identifiers = "paf_identifiers",
+    preferences = 'paf_preferences',
+    test_3pc = 'paf_test_3pc'
 }
 
 export const UNKNOWN_TO_OPERATOR = 'UNKNOWN_TO_OPERATOR'
@@ -16,12 +16,20 @@ export const getPrebidDataCacheExpiration = (date: Date = new Date()) => {
 }
 
 /**
- * @param idCookie
+ * @param idsCookie
  * @param prefsCookie
  */
-export const fromCookieValues = (idCookie: string, prefsCookie: string): IdAndOptionalPreferences => {
+export const fromCookieValues = (idsCookie: string, prefsCookie: string): IdsAndOptionalPreferences => {
     return {
-        identifiers: (idCookie === UNKNOWN_TO_OPERATOR || idCookie === undefined) ? [] : [JSON.parse(idCookie) as Identifier],
-        preferences: (prefsCookie === UNKNOWN_TO_OPERATOR || prefsCookie === undefined) ? undefined : JSON.parse(prefsCookie) as Preferences
+        identifiers: fromIdsCookie(idsCookie) ?? [],
+        preferences: fromPrefsCookie(prefsCookie)
     }
 }
+
+export const fromIdsCookie = (idsCookie: string): Identifiers|undefined => (idsCookie === UNKNOWN_TO_OPERATOR || idsCookie === undefined) ? undefined : JSON.parse(idsCookie) as Identifiers
+export const fromPrefsCookie = (prefsCookie: string): Preferences|undefined => (prefsCookie === UNKNOWN_TO_OPERATOR || prefsCookie === undefined) ? undefined : JSON.parse(prefsCookie) as Preferences
+export const fromTest3pcCookie = (test3pcCookie: string): Test3Pc|undefined => (test3pcCookie === undefined) ? undefined : JSON.parse(test3pcCookie) as Test3Pc
+
+export const toIdsCookie = (identifiers: Identifiers): string => JSON.stringify(identifiers)
+export const toPrefsCookie = (preferences: Preferences): string => JSON.stringify(preferences)
+export const toTest3pcCookie = (test3pc: Test3Pc): string => JSON.stringify(test3pc)

@@ -10,51 +10,47 @@
  */
 export type Domain = string;
 /**
- * GET /v1/id-prefs request
+ * No parameter expected to call this endpoint
  */
-export type GetIdPrefsRequest = MessageBase;
+export type Get3PcRequest = null;
 /**
  * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
  */
 export type Timestamp = number;
 /**
+ * No parameter expected to call this endpoint
+ */
+export type GetIdentityRequest = null;
+/**
+ * A version number made of a "major" and a "minor" version numbers.
+ *
+ * To be detailed.
+ */
+export type Version = string;
+/**
+ * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
+ */
+export type Timestamp1 = number;
+/**
+ * Number of seconds since UNIX Epoch time (1970/01/01 00:00:00)
+ */
+export type Timestamp2 = number;
+/**
  * The base64 representation of a data signature
  */
 export type Signature = string;
 /**
- * GET /v1/id-prefs response
+ * List of identifiers
  */
-export type GetIdPrefsResponse = MessageBase & {
-  body: IdAndOptionalPreferences;
-};
+export type Identifiers = Identifier1[];
 /**
- * A version number. To be detailed.
+ * The URL that the user should be be redirected to, to provide response data
  */
-export type Version = 0;
+export type ReturnUrl = string;
 /**
- * GET /v1/new-id request
+ * The response code used on a redirect endpoint<br>While REST endpoints can use HTTP codes to communicate the state of the response, redirect endpoints are limited to `30x` HTTP codes.<br>To address this problem, this property is used to contain the same HTTP code as the one that would be returned by a REST endpoint.
  */
-export type GetNewIdRequest = MessageBase;
-/**
- * GET /v1/new-id response
- */
-export type GetNewIdResponse = MessageBase & {
-  body: {
-    identifiers: Identifier[];
-  };
-};
-/**
- * POST /v1/id-prefs request
- */
-export type PostIdPrefsRequest = MessageBase & {
-  body: IdAndPreferences;
-};
-/**
- * POST /v1/id-prefs response
- */
-export type PostIdPrefsResponse = MessageBase & {
-  body: IdAndPreferences;
-};
+export type ResponseCode = number;
 
 /**
  * ** Please ignore **
@@ -62,40 +58,110 @@ export type PostIdPrefsResponse = MessageBase & {
  */
 export interface _ {
   domain?: Domain;
-  "get-id-prefs-request"?: GetIdPrefsRequest;
-  "get-id-prefs-response"?: GetIdPrefsResponse;
+  error?: Error;
+  "get-3pc-request"?: Get3PcRequest;
+  "get-3pc-response"?: Get3PcResponse;
+  "get-identity-request"?: GetIdentityRequest;
+  "get-identity-response"?: GetIdentityResponse;
+  "get-ids-prefs-request"?: GetIdsPrefsRequest;
+  "get-ids-prefs-response"?: GetIdsPrefsResponse;
   "get-new-id-request"?: GetNewIdRequest;
   "get-new-id-response"?: GetNewIdResponse;
-  "id-and-optional-preferences"?: IdAndOptionalPreferences;
-  "id-and-preferences"?: IdAndPreferences;
   identifier?: Identifier;
+  identifiers?: Identifiers;
+  "ids-and-optional-preferences"?: IdsAndOptionalPreferences;
+  "ids-and-preferences"?: IdsAndPreferences;
   "message-base"?: MessageBase;
-  "post-id-prefs-request"?: PostIdPrefsRequest;
-  "post-id-prefs-response"?: PostIdPrefsResponse;
+  "post-ids-prefs-request"?: PostIdsPrefsRequest;
+  "post-ids-prefs-response"?: PostIdsPrefsResponse;
   preferences?: Preferences;
+  "redirect-get-ids-prefs-request"?: RedirectGetIdsPrefsRequest;
+  "redirect-get-ids-prefs-response"?: RedirectGetIdsPrefsResponse;
+  "redirect-post-ids-prefs-request"?: RedirectPostIdsPrefsRequest;
+  "redirect-post-ids-prefs-response"?: RedirectPostIdsPrefsResponse;
+  "response-code"?: ResponseCode;
+  "return-url"?: ReturnUrl;
   signature?: Signature;
   source?: Source;
+  "test-3pc"?: Test3Pc;
   timestamp?: Timestamp;
   version?: Version;
 }
 /**
- * The base properties of a request or response to/from an operator
+ * The description of an error
  */
-export interface MessageBase {
+export interface Error {
+  /**
+   * The error message
+   */
+  message: string;
+}
+/**
+ * GET /v1/3pc response
+ */
+export interface Get3PcResponse {
+  "3pc": Test3Pc;
+}
+/**
+ * A cookie temporarily set to test support of 3d party cookies
+ */
+export interface Test3Pc {
+  timestamp: Timestamp;
+}
+/**
+ * GET /v1/identity response
+ */
+export interface GetIdentityResponse {
+  /**
+   * The name of the contracting party, since the domain may not reflect the company name.
+   *
+   */
+  name: string;
+  /**
+   * The type of contracting party in the PAF ecosystem
+   */
+  type: "vendor" | "operator";
+  version: Version;
+  /**
+   * List of public keys the contracting party used or is using for signing data and messages
+   */
+  keys: {
+    /**
+     * Public key string value
+     */
+    key: string;
+    start: Timestamp1;
+    end?: Timestamp2;
+  }[];
+}
+/**
+ * GET /v1/ids-prefs request
+ */
+export interface GetIdsPrefsRequest {
   sender: Domain;
   receiver: Domain;
   timestamp: Timestamp;
   signature: Signature;
 }
 /**
+ * GET /v1/ids-prefs response
+ */
+export interface GetIdsPrefsResponse {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+  body: IdsAndOptionalPreferences;
+}
+/**
  * A list of identifiers and optionally, some preferences
  */
-export interface IdAndOptionalPreferences {
+export interface IdsAndOptionalPreferences {
   preferences?: Preferences;
   identifiers: Identifier[];
 }
 /**
- * User preferences
+ * The current preferences of the user
  */
 export interface Preferences {
   version: Version;
@@ -116,16 +182,56 @@ export interface Source {
   signature: Signature;
 }
 /**
- * A user identifier
+ * A pseudonymous identifier generated for a web user
  */
 export interface Identifier {
   version: Version;
   /**
-   * The identifier type. To date only "prebid_id" is supported
+   * The identifier type, identifier of type `paf_browser_id` is mandatory and is "pivot"
    */
-  type: "prebid_id";
+  type: "paf_browser_id";
   /**
-   * If set to false, means the identifier has not yet been persisted as a cookie
+   * If set to `false`, means the identifier has not yet been persisted as a cookie.<br>Otherwise, means this identifier is persisted as a PAF cookie<br>(default value = `true` meaning if the property is omitted the identifier *is* persisted)
+   */
+  persisted?: boolean;
+  /**
+   * The identifier value
+   */
+  value: string;
+  source: Source;
+}
+/**
+ * GET /v1/new-id request
+ */
+export interface GetNewIdRequest {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+}
+/**
+ * GET /v1/new-id response
+ */
+export interface GetNewIdResponse {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+  body: {
+    identifiers: Identifier[];
+  };
+}
+/**
+ * A pseudonymous identifier generated for a web user
+ */
+export interface Identifier1 {
+  version: Version;
+  /**
+   * The identifier type, identifier of type `paf_browser_id` is mandatory and is "pivot"
+   */
+  type: "paf_browser_id";
+  /**
+   * If set to `false`, means the identifier has not yet been persisted as a cookie.<br>Otherwise, means this identifier is persisted as a PAF cookie<br>(default value = `true` meaning if the property is omitted the identifier *is* persisted)
    */
   persisted?: boolean;
   /**
@@ -137,7 +243,60 @@ export interface Identifier {
 /**
  * A list of identifiers and some preferences
  */
-export interface IdAndPreferences {
+export interface IdsAndPreferences {
   preferences: Preferences;
   identifiers: Identifier[];
+}
+/**
+ * The base properties of a request or response to/from an operator
+ */
+export interface MessageBase {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+}
+/**
+ * POST /v1/ids-prefs request
+ */
+export interface PostIdsPrefsRequest {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+  body: IdsAndPreferences;
+}
+/**
+ * POST /v1/ids-prefs response
+ */
+export interface PostIdsPrefsResponse {
+  sender: Domain;
+  receiver: Domain;
+  timestamp: Timestamp;
+  signature: Signature;
+  body: IdsAndPreferences;
+}
+/**
+ * GET /v1/redirect/get-ids-prefs request
+ */
+export interface RedirectGetIdsPrefsRequest {
+  returnUrl: ReturnUrl;
+  request: GetIdsPrefsRequest;
+}
+export interface RedirectGetIdsPrefsResponse {
+  code: ResponseCode;
+  response?: GetIdsPrefsResponse;
+  error?: Error;
+}
+/**
+ * GET /v1/redirect/post-ids-prefs request
+ */
+export interface RedirectPostIdsPrefsRequest {
+  returnUrl: ReturnUrl;
+  request: PostIdsPrefsRequest;
+}
+export interface RedirectPostIdsPrefsResponse {
+  code: ResponseCode;
+  response?: PostIdsPrefsResponse;
+  error?: Error;
 }

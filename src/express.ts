@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import {CookieOptions} from "express-serve-static-core";
-import {uriParams} from "./endpoints";
+import {encodeBase64, fromDataToObject, QSParam} from "./query-string";
 
 export const setCookie = (res: Response, cookieName: string, cookieValue: any, expirationDate: Date, optionsOverride: CookieOptions = {}) => {
     const options: CookieOptions = {
@@ -28,16 +28,26 @@ export const metaRedirect = (res: Response, redirectUrl: string, view: string) =
     })
 }
 
-export const getReturnUrl = (req: Request, res: Response): URL | undefined => {
-    const redirectStr = getMandatoryQueryStringParam(req, res, uriParams.returnUrl)
-    return redirectStr ? new URL(redirectStr) : undefined
+/**
+ * Extract PAF data from query string if the "paf" query string parameter is set.
+ * @param req
+ */
+export const getPafDataFromQueryString = <T>(req: Request): T|undefined => {
+    const data = req.query[QSParam.paf] as string | undefined;
+    return fromDataToObject(data)
 }
 
-export const getMandatoryQueryStringParam = (req: Request, res: Response, paramName: string): string | undefined => {
-    const stringValue = req.query[paramName] as string;
-    if (stringValue === undefined) {
-        res.sendStatus(400)
-        return undefined;
-    }
-    return stringValue
+/**
+ * Set request or response object in query string
+ * @param req
+ * @param requestOrResponse
+ */
+export const setInQueryString = <T>(url: URL, requestOrResponse: T): URL => {
+    url.searchParams.set(QSParam.paf, encodeBase64(JSON.stringify(requestOrResponse)))
+    return url
 }
+
+
+export const getCookies = (req: Request) => req.cookies ?? {}
+
+export const getRequestUrl = (req: Request, path = req.url) => new URL(path, `${req.protocol}://${req.get('host')}`)
