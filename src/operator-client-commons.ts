@@ -7,7 +7,7 @@ export enum PafStatus {
     UP_TO_DATE = "UP_TO_DATE"
 }
 
-const cleanCookieValue = (cookieValue: string): string | undefined =>
+const getCleanCookieValue = (cookieValue: string): string | undefined =>
     cookieValue === PafStatus.NOT_PARTICIPATING || cookieValue === PafStatus.REDIRECT_NEEDED
         ? undefined
         : cookieValue
@@ -19,8 +19,8 @@ const cleanCookieValue = (cookieValue: string): string | undefined =>
  */
 export const fromClientCookieValues = (idsCookie: string, prefsCookie: string): IdsAndOptionalPreferences => {
     return {
-        identifiers: fromIdsCookie(cleanCookieValue(idsCookie)) ?? [],
-        preferences: fromPrefsCookie(cleanCookieValue(prefsCookie))
+        identifiers: fromIdsCookie(getCleanCookieValue(idsCookie)) ?? [],
+        preferences: fromPrefsCookie(getCleanCookieValue(prefsCookie))
     }
 }
 
